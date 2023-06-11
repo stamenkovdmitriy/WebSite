@@ -16,6 +16,8 @@ namespace WebSite
         // здесь мы можем конфигурировать различные сервисы, которые будут необходимы сайту
         public void ConfigureServices(IServiceCollection services)
         {
+            // подключаем MVC
+            services.AddControllersWithViews();
         }
 
         // метод в котором реализуется вся логика сайта
@@ -34,15 +36,15 @@ namespace WebSite
              настраиваем точки входа для приложения */
             app.UseEndpoints(endpoints =>
             {
-                /* переменная endpoints через которую мы получаем доступ к объекту, который реализует интерфейс IEndpointRouteBuilder
-                 этот интерфейс описывает методы, которые позволяют привязывать определенные URL к коду(в данном случае метод MapGet)
-                Метод MapGet получает два параметра: 1- строка в которой содержится URL
-                 2- метод, который будет получать ув качестве параметра контекст отображения страницы(типа HtttpContext),
-                в которой можно писать текстдля отображения на странице  */
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                /* с помощью метода MapControllerRoute включаем маршрутизацию на контроллеры
+                    этому методу нужно передать как минимум два параметра: имя и шаблон
+                 {controller=Home} имя класса контроллера, 
+                 {action=Index} этот параметр позволяет указать,
+                    какой метод класса конторллера нужно вызвать для обработки запроса 
+                    {id?} параметр он не обязательный поэтому стоит знак вопроса*/
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
